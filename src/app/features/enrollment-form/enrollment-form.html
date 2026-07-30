@@ -1,0 +1,166 @@
+<h2 class="text-3xl font-bold text-white mb-6">
+  Course Enrollment
+</h2>
+
+
+@if(submitted()){
+
+<div class="bg-green-500 text-white p-4 rounded-xl">
+
+Enrollment submitted successfully.
+Check console payload.
+
+</div>
+
+}
+
+@else {
+
+
+<form
+class="space-y-5"
+[formGroup]="form"
+(ngSubmit)="submit()">
+
+
+<label class="text-white">
+Student ID
+</label>
+
+
+<input
+class="w-full p-3 rounded"
+formControlName="studentId"
+placeholder="STU-0001"
+/>
+
+
+@if(
+form.controls.studentId.touched &&
+form.controls.studentId.invalid
+){
+
+<p class="text-red-400">
+Enter valid Student ID (STU-0000)
+</p>
+
+}
+
+
+
+
+<label class="text-white">
+Course ID
+</label>
+
+
+<input
+class="w-full p-3 rounded"
+formControlName="courseId"
+placeholder="1"
+/>
+
+
+@if(
+form.controls.courseId.touched &&
+form.controls.courseId.invalid
+){
+
+<p class="text-red-400">
+Course ID required
+</p>
+
+}
+
+
+
+
+<label class="text-white">
+Term
+</label>
+
+<input
+class="w-full p-3 rounded"
+formControlName="term"
+/>
+
+
+
+
+<label class="text-white">
+Notes
+</label>
+
+
+<textarea
+class="w-full p-3 rounded"
+formControlName="notes">
+</textarea>
+
+
+
+
+<h3 class="text-white text-xl">
+Backup Courses
+</h3>
+
+
+
+@for(
+backup of backups.controls;
+track $index
+){
+
+<div class="flex gap-3">
+
+
+<input
+class="flex-1 p-3 rounded"
+[formControl]="backup"
+[placeholder]="'Backup Course '+($index+1)"
+>
+
+
+<button
+type="button"
+class="bg-red-500 text-white px-4 rounded"
+(click)="removeBackup($index)"
+>
+
+Remove
+
+</button>
+
+
+</div>
+
+}
+
+
+
+<button
+type="button"
+class="bg-blue-500 text-white px-4 py-2 rounded"
+(click)="addBackup()"
+>
+
+Add Backup Course
+
+</button>
+
+
+
+<button
+type="submit"
+class="bg-green-600 text-white px-5 py-3 rounded"
+[disabled]="form.invalid"
+>
+
+Confirm Enrollment
+
+</button>
+
+
+</form>
+
+}
