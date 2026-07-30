@@ -1,9 +1,16 @@
 export interface Course {
-id: number;
-code: string;
-title: string;
-maxCapacity: number;
-enrollmentCount: number;
+
+ id: number;
+
+  title: string;
+
+  code: string;
+
+  description: string;
+
+  maxCapacity: number;
+
+  enrollmentCount: number;
 }
 /** Envelope for `GET /api/courses` — TMS API contract list shape (`PagedResponse<T>`). */
 export interface PagedResponse<T> {
