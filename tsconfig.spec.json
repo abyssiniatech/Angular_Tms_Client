@@ -10,5 +10,5 @@
   "include": [
     "src/**/*.spec.ts",
     "src/**/*.d.ts"
-  ]
+, "src/app/ui/course-card/course-card.spec.component.ts"  ]
 }

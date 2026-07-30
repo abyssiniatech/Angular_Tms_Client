@@ -1,107 +1,87 @@
 <div class="min-h-screen bg-linear-to-br from-slate-950 via-indigo-900 to-purple-900 p-6">
 
-
-<div class="max-w-6xl mx-auto">
-
-
-<header class="bg-white/10 backdrop-blur-lg 
-border border-white/20 rounded-3xl 
-p-8 mb-8 shadow-xl">
+  <div class="max-w-6xl mx-auto">
 
 
-<h1 class="text-4xl font-bold text-white">
-Student Dashboard
-</h1>
+    <header class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 mb-8 shadow-xl">
+
+      <h1 class="text-4xl font-bold text-white">
+        Student Dashboard
+      </h1>
+
+    </header>
 
 
-</header>
-
-
-
-<h2 class="text-3xl text-white font-bold mb-6">
-Course Catalog
-</h2>
+    <h2 class="text-3xl font-bold text-white mb-6">
+      Course Catalog
+    </h2>
 
 
 
-@if(availableCourses().length === 0)
-{
+    @if (availableCourses().length === 0) {
 
-<div class="bg-white/10 text-white rounded-xl p-8">
+      <div class="empty-state">
+        <p class="text-white text-xl">
+          No courses are available this term.
+          Check back during registration.
+        </p>
+      </div>
 
-<p>
-No courses are available this term.
-Check back during registration.
-</p>
+    }
 
-</div>
-
-
-}
-
-@else {
+    @else {
 
 
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
 
-@for(course of availableCourses(); track course.id)
-{
+        @for (course of availableCourses(); track course.id) {
 
 
-<tms-course-card
-[course]="course"
-(enrollClicked)="handleEnroll($event)">
-</tms-course-card>
+          <tms-course-card
+            [course]="course"
+            (enrollClicked)="handleEnroll($event)">
+          </tms-course-card>
 
 
-}
+        }
+        @empty {
+
+          <p class="text-white">
+            No results match your search.
+          </p>
+
+        }
 
 
-@empty {
-
-<p class="text-white">
-No results match your search.
-</p>
-
-}
+      </div>
 
 
-</div>
-
-
-}
+    }
 
 
 
-@if(selectedCourse(); as picked)
-{
+    @if (selectedCourse(); as picked) {
 
 
-<div class="mt-8 bg-green-500/20
-border border-green-400
-text-white rounded-xl p-4">
+      <p
+        class="selection-hint mt-8 text-white bg-white/10 p-4 rounded-xl"
+        role="status">
+
+        Last enrollment request:
+
+        <strong>
+          {{ picked.title }}
+        </strong>
+
+        ({{ picked.code }})
+
+      </p>
 
 
-<p role="status">
-
-Last enrollment request:
-
-<strong>
-{{picked.title}}
-</strong>
-
-({{picked.code}})
-
-</p>
+    }
 
 
-</div>
-
-
-}
-
-
-</div>
+  </div>
 
 </div>
