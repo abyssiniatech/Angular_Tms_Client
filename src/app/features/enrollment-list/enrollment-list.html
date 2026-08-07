@@ -1,0 +1,58 @@
+
+
+
+
+@if (store.isLoading()) {
+
+  <p>Loading enrollments...</p>
+
+}
+
+
+@if (store.error()) {
+
+  <p class="error">
+    {{ store.error() }}
+  </p>
+
+}
+
+
+@for (enrollment of store.entities(); track enrollment.id) {
+
+
+<div class="enrollment-card text-white bg-indigo-900 p-4 rounded-lg shadow-md mb-4">
+
+
+  <h3>
+    {{ enrollment.studentName }}
+  </h3>
+
+
+  <p>
+    Course:
+    {{ enrollment.courseName }}
+  </p>
+
+
+  <p>
+    Status:
+    {{ enrollment.status }}
+  </p>
+
+
+
+  @if (enrollment.status === 'Pending') {
+
+    <button
+      (click)="onApprove(enrollment.id)">
+      Approve
+    </button>
+
+  }
+
+
+</div>
+
+
+}
