@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { StudentDashboardComponent }
-from './features/student-dashboard/student-dashboard.component';
+  from './features/student-dashboard/student-dashboard.component';
 
 
 export const routes: Routes = [
@@ -13,12 +13,25 @@ export const routes: Routes = [
   },
 
 
+  // Student Dashboard
   {
     path: 'dashboard',
     component: StudentDashboardComponent
   },
 
 
+  // Instructor Dashboard (Module 9)
+  {
+    path: 'instructor-dashboard',
+    loadComponent: () =>
+      import('./features/instructor-dashboard/instructor-dashboard')
+        .then(
+          m => m.InstructorDashboardComponent
+        )
+  },
+
+
+  // Enrollment Management
   {
     path: 'enrollments',
     loadComponent: () =>
@@ -29,6 +42,7 @@ export const routes: Routes = [
   },
 
 
+  // Course Detail
   {
     path: 'courses/:id',
     loadComponent: () =>
@@ -39,6 +53,7 @@ export const routes: Routes = [
   },
 
 
+  // Wildcard
   {
     path: '**',
     redirectTo: 'dashboard'

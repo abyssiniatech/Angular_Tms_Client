@@ -1,0 +1,85 @@
+<h1>
+Instructor Command Center
+</h1>
+
+
+<div class="kpi-row">
+
+<div class="kpi-card">
+
+<span>
+{{store.entities().length}}
+</span>
+
+Total Enrollments
+
+</div>
+
+
+<div class="kpi-card pending">
+
+<span>
+{{store.pendingCount()}}
+</span>
+
+Pending Approval
+
+</div>
+
+</div>
+
+
+
+<section class="chart-section">
+
+
+@defer(
+on viewport;
+prefetch on idle(500)
+){
+
+<tms-analytics-chart
+[data]="store.entities()">
+</tms-analytics-chart>
+
+
+}
+
+@placeholder {
+
+
+<div class="skeleton-chart">
+
+Scroll down to view analytics...
+
+</div>
+
+
+}
+
+
+@loading(minimum 500ms){
+
+
+<div class="spinner">
+
+Downloading chart engine...
+
+</div>
+
+
+}
+
+
+@error {
+
+
+<p>
+Failed to load chart
+</p>
+
+
+}
+
+
+</section>
