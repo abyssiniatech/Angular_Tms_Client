@@ -1,20 +1,27 @@
+<div class="min-h-screen bg-slate-900 p-8">
 
 
-<div class="min-h-screen bg-linear-to-br from-slate-950 via-indigo-900 to-purple-900 p-6">
+  <!-- Header -->
+  <header
+    class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 mb-8 shadow-xl">
 
-  <div class="max-w-6xl mx-auto">
+    <h1 class="text-4xl font-bold text-white">
+      Student Dashboard
+    </h1>
 
-    <header class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 mb-8 shadow-xl">
+  </header>
 
-      <h1 class="text-4xl font-bold text-white">
-        Student Dashboard
-      </h1>
 
-    </header>
+
+  <!-- Course Section -->
+
+  <section>
 
     <h2 class="text-3xl font-bold text-white mb-6">
       Course Catalog
     </h2>
+
+
 
     @if (coursesResource.isLoading()) {
 
@@ -24,7 +31,9 @@
 
     }
 
+
     @else if (coursesResource.error()) {
+
 
       <p class="text-red-300 text-xl">
         Failed to load courses.
@@ -32,59 +41,109 @@
 
     }
 
+
     @else if (courses().length === 0) {
 
-      <div class="empty-state">
+
+      <div class="bg-white/10 p-6 rounded-xl">
+
         <p class="text-white text-xl">
           No courses are available this term.
-          Check back during registration.
         </p>
+
       </div>
 
     }
+
 
     @else {
 
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
 
         @for (course of courses(); track course.id) {
 
+
           <tms-course-card
+
             [course]="course"
+
             (enrollClicked)="handleEnroll($event)">
+
           </tms-course-card>
 
-        }
-        @empty {
-
-          <p class="text-white">
-            No results match your search.
-          </p>
 
         }
+
 
       </div>
 
-    }
-
-    @if (selectedCourse(); as picked) {
-
-      <p
-        class="selection-hint mt-8 text-white bg-white/10 p-4 rounded-xl"
-        role="status">
-
-        Last enrollment request:
-
-        <strong>
-          {{ picked.title }}
-        </strong>
-
-        ({{ picked.code }})
-
-      </p>
 
     }
 
-  </div>
+
+  </section>
+
+
+
+
+
+  <!-- Selected Course -->
+
+  @if (selectedCourse(); as picked) {
+
+
+    <div
+      class="mt-8 text-white bg-white/10 p-4 rounded-xl">
+
+
+      Last enrollment request:
+
+
+      <strong>
+        {{ picked.title }}
+      </strong>
+
+
+      ({{ picked.code }})
+
+
+    </div>
+
+
+  }
+
+
+
+
+
+  <!-- Module 9 SignalStore Section -->
+
+  <section class="mt-10">
+
+
+    <h2 class="text-3xl font-bold text-white mb-6">
+
+      Enrollment Management
+
+    </h2>
+
+
+
+    <div
+      class="bg-white/10 backdrop-blur-lg rounded-3xl p-6">
+
+
+      <tms-enrollment-list>
+      </tms-enrollment-list>
+
+
+    </div>
+
+
+  </section>
+
+
 
 </div>

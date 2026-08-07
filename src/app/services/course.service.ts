@@ -16,7 +16,7 @@ export class CourseService {
 
   private http = inject(HttpClient);
 
-  private baseUrl = 'https://localhost:5071/api/v2/courses';
+  private baseUrl = 'http://localhost:5071/api/v2/courses';
 
   getAll() {
     return this.http
