@@ -13,5 +13,6 @@ export interface Enrollment {
   status: 'Pending' | 'Approved' | 'Rejected';
 
   enrolledAt: string;
+  
 
 }
