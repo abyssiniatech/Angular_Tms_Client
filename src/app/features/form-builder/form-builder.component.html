@@ -1,0 +1,338 @@
+<div class="max-w-7xl mx-auto p-6">
+  <!-- Page Header -->
+  <h1 class="text-4xl font-bold text-white mb-2">Form Builder</h1>
+
+  <p class="text-gray-400 mb-8">Visually construct dynamic forms and preview them in real-time.</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- ========================================================= -->
+    <!-- LEFT PANEL -->
+    <!-- ========================================================= -->
+
+    <div class="lg:col-span-1 space-y-4">
+      <!-- Global Form Settings -->
+      <div class="bg-gray-800 rounded-xl p-4 space-y-3">
+        <h3 class="text-white font-semibold">Form Settings</h3>
+
+        <!-- Title -->
+        <div>
+          <label class="block text-gray-300 text-sm mb-1"> Title </label>
+
+          <input
+            class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+            [value]="title()"
+            (input)="title.set($any($event.target).value)"
+          />
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label class="block text-gray-300 text-sm mb-1"> Description </label>
+
+          <textarea
+            class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+            rows="2"
+            [value]="description()"
+            (input)="description.set($any($event.target).value)"
+          ></textarea>
+        </div>
+
+        <!-- Submit Button Text -->
+        <div>
+          <label class="block text-gray-300 text-sm mb-1"> Submit Button Text </label>
+
+          <input
+            class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+            [value]="submitLabel()"
+            (input)="submitLabel.set($any($event.target).value)"
+          />
+        </div>
+      </div>
+
+      <!-- Add Field Buttons -->
+      <div class="bg-gray-800 rounded-xl p-4">
+        <h3 class="text-white font-semibold mb-3">Add Field</h3>
+
+        <div class="flex flex-wrap gap-2">
+          @for (type of fieldTypes; track type) {
+            <button
+              type="button"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-3 py-1 rounded transition-colors"
+              (click)="addField(type)"
+            >
+              {{ type }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Field List -->
+      <div class="bg-gray-800 rounded-xl p-4">
+        <h3 class="text-white font-semibold mb-3">Fields</h3>
+
+        @if (fields().length === 0) {
+          <p class="text-gray-400 text-sm">No fields added yet.</p>
+        } @else {
+          <div class="space-y-2">
+            @for (field of fields(); track field.key) {
+              <div
+                class="flex items-center justify-between p-3 rounded cursor-pointer transition-colors"
+                [class.bg-gray-700]="selectedFieldKey() !== field.key"
+                [class.bg-blue-900]="selectedFieldKey() === field.key"
+                (click)="selectField(field.key)"
+              >
+                <div>
+                  <p class="text-white font-medium">
+                    {{ field.label }}
+                  </p>
+
+                  <p class="text-gray-400 text-xs">
+                    {{ field.type }}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  class="text-red-400 hover:text-red-300 text-sm px-2"
+                  (click)="$event.stopPropagation(); removeField(field.key)"
+                >
+                  Remove
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Copy Configuration -->
+      <button
+        type="button"
+        class="w-full bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 rounded transition-colors"
+        (click)="copyConfigToClipboard()"
+      >
+        Copy Config to Clipboard
+      </button>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- RIGHT PANEL -->
+    <!-- ========================================================= -->
+
+    <div class="lg:col-span-2 space-y-6">
+      <!-- ======================================================= -->
+      <!-- FIELD EDITOR -->
+      <!-- ======================================================= -->
+
+      @if (selectedField(); as field) {
+        <div class="bg-gray-800 rounded-xl p-6 space-y-4">
+          <h3 class="text-white font-semibold text-xl">Edit Field</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Label -->
+            <div>
+              <label class="block text-gray-300 text-sm mb-1"> Label </label>
+
+              <input
+                class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                [value]="field.label"
+                (input)="updateField(field.key, { label: $any($event.target).value })"
+              />
+            </div>
+
+            <!-- Key -->
+            <div>
+              <label class="block text-gray-300 text-sm mb-1"> Key </label>
+
+              <input
+                class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                [value]="field.key"
+                (input)="updateField(field.key, { key: $any($event.target).value })"
+              />
+            </div>
+
+            <!-- Type -->
+            <div>
+              <label class="block text-gray-300 text-sm mb-1"> Type </label>
+
+              <select
+                class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                [value]="field.type"
+                (change)="onTypeChange(field.key, $any($event.target).value)"
+              >
+                @for (type of fieldTypes; track type) {
+                  <option [value]="type">
+                    {{ type }}
+                  </option>
+                }
+              </select>
+            </div>
+
+            <!-- Placeholder -->
+            <div>
+              <label class="block text-gray-300 text-sm mb-1"> Placeholder </label>
+
+              <input
+                class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                [value]="field.placeholder ?? ''"
+                (input)="updateField(field.key, { placeholder: $any($event.target).value })"
+              />
+            </div>
+
+            <!-- ================================================= -->
+            <!-- NUMBER SETTINGS -->
+            <!-- ================================================= -->
+
+            @if (field.type === 'number') {
+              <!-- Minimum -->
+              <div>
+                <label class="block text-gray-300 text-sm mb-1"> Min </label>
+
+                <input
+                  type="number"
+                  class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                  [value]="field.min ?? ''"
+                  (input)="
+                    updateField(field.key, {
+                      min: parseOptionalNumber($any($event.target).value),
+                    })
+                  "
+                />
+              </div>
+
+              <!-- Maximum -->
+              <div>
+                <label class="block text-gray-300 text-sm mb-1"> Max </label>
+
+                <input
+                  type="number"
+                  class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                  [value]="field.max ?? ''"
+                  (input)="
+                    updateField(field.key, {
+                      max: parseOptionalNumber($any($event.target).value),
+                    })
+                  "
+                />
+              </div>
+            }
+
+            <!-- ================================================= -->
+            <!-- TEXTAREA SETTINGS -->
+            <!-- ================================================= -->
+
+            @if (field.type === 'textarea') {
+              <div>
+                <label class="block text-gray-300 text-sm mb-1"> Rows </label>
+
+                <input
+                  type="number"
+                  min="1"
+                  class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                  [value]="field.rows ?? 4"
+                  (input)="
+                    updateField(field.key, {
+                      rows: parseOptionalNumber($any($event.target).value),
+                    })
+                  "
+                />
+              </div>
+            }
+
+            <!-- ================================================= -->
+            <!-- REQUIRED -->
+            <!-- ================================================= -->
+
+            <div class="flex items-center gap-2 md:col-span-2">
+              <input
+                type="checkbox"
+                [id]="'required-' + field.key"
+                class="w-5 h-5 rounded bg-gray-700 border border-gray-600"
+                [checked]="field.required ?? false"
+                (change)="
+                  updateField(field.key, {
+                    required: $any($event.target).checked,
+                  })
+                "
+              />
+
+              <label [for]="'required-' + field.key" class="text-white"> Required </label>
+            </div>
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- SELECT OPTIONS EDITOR -->
+          <!-- ===================================================== -->
+
+          @if (field.type === 'select') {
+            <div class="space-y-3">
+              <h4 class="text-white font-medium">Options</h4>
+
+              @if (field.options && field.options.length > 0) {
+                @for (option of field.options; track option.value; let i = $index) {
+                  <div class="flex gap-2">
+                    <!-- Option Label -->
+                    <input
+                      class="flex-1 p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                      [value]="option.label"
+                      (input)="
+                        updateOption(i, {
+                          label: $any($event.target).value,
+                        })
+                      "
+                      placeholder="Label"
+                    />
+
+                    <!-- Option Value -->
+                    <input
+                      class="w-24 p-2 rounded bg-gray-700 border border-gray-600 text-white focus:border-blue-500 focus:outline-none"
+                      [value]="option.value"
+                      (input)="
+                        updateOption(i, {
+                          value: $any($event.target).value,
+                        })
+                      "
+                      placeholder="Value"
+                    />
+
+                    <!-- Remove Option -->
+                    <button
+                      type="button"
+                      class="text-red-400 hover:text-red-300 px-2"
+                      (click)="removeOption(i)"
+                    >
+                      X
+                    </button>
+                  </div>
+                }
+              } @else {
+                <p class="text-gray-400 text-sm">No options added yet.</p>
+              }
+
+              <!-- Add Option -->
+              <button
+                type="button"
+                class="bg-gray-700 hover:bg-gray-600 text-white text-sm px-3 py-1 rounded transition-colors"
+                (click)="addOption()"
+              >
+                Add Option
+              </button>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- ======================================================= -->
+      <!-- LIVE PREVIEW -->
+      <!-- ======================================================= -->
+
+      <div class="bg-gray-800 rounded-xl p-6">
+        <h3 class="text-white font-semibold text-xl mb-4">Live Preview</h3>
+
+        <tms-dynamic-form
+          [config]="config()"
+          (formSubmit)="handleFormSubmit($event)"
+        ></tms-dynamic-form>
+      </div>
+    </div>
+  </div>
+</div>
