@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { CourseService } from '../../services/course.service';
 import { CourseDetail } from '../../models/course.model';
 
@@ -11,8 +12,8 @@ import { CourseDetail } from '../../models/course.model';
 })
 export class CourseDetailComponent {
 
-  private route = inject(ActivatedRoute);
-  private courseService = inject(CourseService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly courseService = inject(CourseService);
 
   course?: CourseDetail;
 
@@ -20,18 +21,19 @@ export class CourseDetailComponent {
     const id = this.route.snapshot.paramMap.get('id');
 
     if (id) {
-      console.log('Route ID:', id);
+      const courseId = Number(id);
 
-      this.courseService.getById(id).subscribe({
-        next: (course) => {
+      console.log('Route ID:', courseId);
+
+      this.courseService.getById(courseId).subscribe({
+        next: (course: CourseDetail) => {
           this.course = course;
           console.log('Course found:', course);
         },
-        error: (err) => {
+        error: (err: unknown) => {
           console.error('Failed to load course:', err);
         }
       });
     }
   }
-
 }

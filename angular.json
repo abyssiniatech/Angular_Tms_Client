@@ -24,7 +24,6 @@
       "prefix": "app",
 
       "architect": {
-
         "build": {
           "builder": "@angular/build:application",
 
@@ -40,14 +39,10 @@
               }
             ],
 
-            "styles": [
-              "src/material-theme.scss",
-              "src/styles.css"
-            ]
+            "styles": ["src/material-theme.scss", "src/styles.css"]
           },
 
           "configurations": {
-
             "production": {
               "budgets": [
                 {
@@ -68,13 +63,18 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
 
           "defaultConfiguration": "production"
         },
-
 
         "serve": {
           "builder": "@angular/build:dev-server",
@@ -84,7 +84,6 @@
           },
 
           "configurations": {
-
             "production": {
               "buildTarget": "tms-client:build:production"
             },
@@ -97,13 +96,10 @@
           "defaultConfiguration": "development"
         },
 
-
         "test": {
           "builder": "@angular/build:unit-test"
         }
-
       }
     }
   }
 }
-
