@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+
 import {
   Course,
   CourseDetail,
@@ -32,6 +33,14 @@ export class CourseService {
   }
 
   getById(id: number) {
-    return this.http.get<CourseDetail>(`${this.base}/${id}`);
+    return this.http.get<CourseDetail>(
+      `${this.base}/${id}`
+    );
+  }
+
+  delete(id: number) {
+    return this.http.delete<void>(
+      `${this.base}/${id}`
+    );
   }
 }
