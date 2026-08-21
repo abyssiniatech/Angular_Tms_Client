@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 
 import { StudentDashboardComponent } from './features/student-dashboard/student-dashboard.component';
+import { EnrollmentListComponent } from './features/enrollment-list/enrollment-list';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
 
@@ -90,6 +92,11 @@ export const routes: Routes = [
       import('./features/form-builder/form-builder.component')
         .then(m => m.FormBuilderComponent)
   },
+  {
+path: 'admin/courses',
+component: EnrollmentListComponent,
+canActivate: [roleGuard('Admin')]
+},
 
   // --------------------------------------------------
   // Wildcard Route
