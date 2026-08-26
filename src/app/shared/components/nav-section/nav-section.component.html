@@ -1,0 +1,12 @@
+<nav aria-label="Main navigation">
+
+  <a
+    *ngFor="let item of visibleItems"
+    [routerLink]="item.route"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+  >
+    {{ item.label }}
+  </a>
+
+</nav>
